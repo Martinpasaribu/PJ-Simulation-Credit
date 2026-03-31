@@ -13,8 +13,12 @@ export default function IMSDashboard() {
   
   const [showSettings, setShowSettings] = useState(false);
   const [config, setConfig] = useState<any>(null);
-  const [simDate, setSimDate] = useState(new Date().toISOString().split('T')[0]);
-  
+    const [simDate, setSimDate] = useState(() => {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    return `${year}-${month}-25`;
+    });
 
   const [form, setForm] = useState({
     name: '',
