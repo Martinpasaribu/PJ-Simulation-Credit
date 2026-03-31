@@ -4,6 +4,7 @@ import { useSearchParams, useRouter } from 'next/navigation';
 // --- IMPORT DRIVER.JS ---
 import { driver } from "driver.js";
 import "driver.js/dist/driver.css";
+import { Wallet } from 'lucide-react'
 
 export default function SimulationPage({ params }: { params: Promise<{ id: string }> | { id: string } }) {
   const searchParams = useSearchParams();
@@ -13,7 +14,14 @@ export default function SimulationPage({ params }: { params: Promise<{ id: strin
   const id = resolvedParams.id;
 
   const initialDate = searchParams.get('date') || new Date().toISOString().split('T')[0];
-  
+
+    //   const initialDate = searchParams.get('date') || (() => {
+    //     const now = new Date();
+    //     const year = now.getFullYear();
+    //     const month = String(now.getMonth() + 1).padStart(2, '0');
+    //     return `${year}-${month}-25`;
+    // })();
+
   const [data, setData] = useState<any>(null);
   const [globalDate, setGlobalDate] = useState(initialDate);
   const [loading, setLoading] = useState(true);
@@ -152,13 +160,23 @@ export default function SimulationPage({ params }: { params: Promise<{ id: strin
             </button>
         </div>
 
-        {/* HEADER INFO */}
+        {/* HEADER: Responsive Column to Row */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6 mb-8 md:mb-10">
           <div id="tour-contract-header" className="lg:col-span-2 bg-[#0f172a] p-6 md:p-8 rounded-3xl border border-slate-800 shadow-xl">
             <div className="flex flex-col sm:flex-row justify-between items-start gap-4 mb-6 md:mb-4">
                <div>
                   <h1 className="text-2xl md:text-4xl font-black text-blue-500 mb-2">{data.transaction.contractId}</h1>
-                  <p className="text-slate-400 text-sm md:font-medium">Customer: <span className="text-white">{data.transaction.userId?.name}</span></p>
+                  <div className="flex flex-col gap-1">
+                    <p className="text-slate-400 text-sm md:font-medium">Customer: <span className="text-white">{data.transaction.userId?.name}</span></p>
+                    {/* INFO TANGGAL TRANSAKSI AWAL */}
+                    <p className="text-slate-500 text-[11px] flex items-center gap-2">
+                        <Wallet size={15}/>
+                        <p>Mulai Transaksi : <span className="text-blue-400/80 font-mono">
+                            {new Date(data.transaction.startDate || data.transaction.createdAt).toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' })}
+                        </span>
+                        </p>
+                    </p>
+                  </div>
                </div>
                <div className="text-left sm:text-right bg-slate-800/30 p-3 rounded-2xl border border-slate-700/50 w-full sm:w-auto">
                     <p className="text-slate-500 text-[10px] uppercase font-bold tracking-widest">Sisa Tenor</p>
@@ -166,7 +184,9 @@ export default function SimulationPage({ params }: { params: Promise<{ id: strin
                </div>
             </div>
 
+            {/* Grid bawah tetap sama */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6 pt-6 border-t border-slate-800/50">
+                {/* ... (Unit, OTR, DP, Bunga) ... */}
                 <div>
                     <p className="text-slate-500 text-[9px] md:text-[10px] uppercase font-bold tracking-widest">Unit</p>
                     <p className="text-white text-sm md:text-base font-medium truncate">{data.transaction.productId?.name}</p>

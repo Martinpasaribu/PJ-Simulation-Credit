@@ -12,6 +12,7 @@ const TransactionSchema = new Schema({
   totalLoan: Number,
   monthlyPayment: Number,
   interestRate: Number,
+  startDate: Date,
   
   // TAMBAHKAN FIELD INI:
   // Array of ObjectIds yang merujuk ke model 'Installment'

@@ -42,6 +42,7 @@ export async function POST(req: Request) {
       productId: product._id,
       tenure,
       dp,
+      
       totalLoan: principal,
       monthlyPayment,
       interestRate: Number((rate * 100).toFixed(1)),
